@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/andrey-tech/debug-logger-php" />
+      <path value="$PROJECT_DIR$/vendor/andrey-tech/http-client-php" />
+      <path value="$PROJECT_DIR$/vendor/andrey-tech/bitrix24-api-php" />
+    </include_path>
+  </component>
+</project>
