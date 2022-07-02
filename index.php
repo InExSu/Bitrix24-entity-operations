@@ -1,81 +1,43 @@
 <?php
+// https://github.com/andrey-tech/bitrix24-api-php#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8
+
 use App\Bitrix24\Bitrix24API;
 use App\Bitrix24\Bitrix24APIException;
 
 try {
+    // https://zelinskygroup.bitrix24.ru/devops/edit/in-hook/417/
+    $file_Name = __DIR__ . '/webHookURL.txt';
+    $webHookURL = file_get_contents($file_Name);
 
-    $webhookURL = 'https://www.example.com/rest/1/u7ngxagzrhpuj31a/';
-    $bx24 = new Bitrix24API($webhookURL);
+    $bx24 = new Bitrix24API($webHookURL);
 
-    // Добавляем новую сделку
-    $dealId = $bx24->addDeal([
-        'TITLE'      => 'Новая сделка №1',
-        'COMPANY_ID' => 6,
-        'CONTACT_ID' => 312
-    ]);
-    print_r($dealId);
-
-    // Устанавливаем набор связанных контактов
-    $bx24->setDealContactItems($dealId, [
-        [ 'CONTACT_ID' => 313 ],
-        [ 'CONTACT_ID' => 454 ]
-    ]);
-
-    // Устанавливаем набор связанных товарных позиций
-    $bx24->setDealProductRows($dealId, [
-        [ 'PRODUCT_ID' => 1689, 'PRICE' => 1500.00, 'QUANTITY' => 2 ],
-        [ 'PRODUCT_ID' => 1860, 'PRICE' => 500.00, 'QUANTITY' => 15 ]
-    ]);
-
-    // Обновляем существующую сделку
-    $bx24->updateDeal($dealId, [
-        'TITLE' => 'Новая сделка №12'
-    ]);
-
-
-    // При необходимости, изменяем значение по умолчанию 'PRODUCTS' на '_PRODUCTS' для имени поля
-    // со списком товарных позиций, возвращаемых вместе со сделкой
-    Bitrix24API::$WITH_PRODUCTS = '_PRODUCTS';
-
-    // Загружаем сделку по ID вместе со связанными товарами и контактами одним запросом
-    $deal = $bx24->getDeal($dealId, [ Bitrix24API::$WITH_PRODUCTS, Bitrix24API::$WITH_CONTACTS ]);
-    print_r($deal);
-
-    // Удаляем существующую сделку
-    $bx24->deleteDeal($dealId);
+    $filter = ['%TITLE' => 'Мих'];
+    $select = ['ID', 'TITLE'];
+    $order_ = ['ID' => 'ASC'];
 
     // Загружаем все сделки используя быстрый метод при работе с большими объемами данных
-    $generator = $bx24->fetchDealList();
-    foreach ($generator as $deals) {
-        foreach($deals as $deal) {
-            print_r($deal);
-        }
-    }
+    $generator = $bx24->fetchDealList($filter, $select, $order_);
 
-    // Пакетно добавляем сделки вместе с товарными позициями
-    $dealIds = $bx24->addDeals([
-        [
-            'TITLE' => 'Новая сделка №1121',
-            'COMPANY_ID' => 6,
-            'CONTACT_ID' => 312,
-            'PRODUCTS' => [
-                [ "PRODUCT_ID" => 27, "PRICE" => 100.00, "QUANTITY" => 11 ],
-            ]
+//    учуся
+    $deal = $bx24->getDeal(22843);
+    print_r($deal);
 
-        ],
-        [
-            'TITLE' => 'Новая сделка №1122',
-            'COMPANY_ID' => 6,
-            'PRODUCTS' => [
-                [ "PRODUCT_ID" => 28, "PRICE" => 200.00, "QUANTITY" => 22 ],
-                [ "PRODUCT_ID" => 27, "PRICE" => 200.00, "QUANTITY" => 11 ],
-            ]
-        ]
-    ]);
-    print_r($dealIds);
+//    foreach ($generator as $deals) {
+//        foreach ($deals as $deal) {
+//            // print_r($deal);
+//            $dealId = '';
+//            // Загружаем сделку по ID вместе со связанными товарами и контактами одним запросом
+//            $deal = $bx24->getDeal($dealId);
+//            print_r($deal);
+//
+//            //    // Обновляем существующую сделку
+////    $bx24->updateDeal($dealId, [
+////        'TITLE' => 'Новая сделка №12'
+////    ]);
+//
+//        }
+//    }
 
-    // Пакетно удаляем сделки
-    $bx24->deleteDeals($dealIds);
 
 } catch (Bitrix24APIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
