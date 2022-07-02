@@ -5,7 +5,7 @@
       <paths name="TimeWeb">
         <serverdata>
           <mappings>
-            <mapping deploy="/public_html/phpb24/Bitrix24 API PHP Wrapper" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/public_html/phpb24/Bitrix24_API_PHP_Wrapper" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

@@ -1,6 +1,8 @@
 <?php
 // https://github.com/andrey-tech/bitrix24-api-php#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8
 
+require __DIR__ . '/vendor/autoload.php';
+
 use App\Bitrix24\Bitrix24API;
 use App\Bitrix24\Bitrix24APIException;
 
@@ -8,6 +10,8 @@ try {
     // https://zelinskygroup.bitrix24.ru/devops/edit/in-hook/417/
     $file_Name = __DIR__ . '/webHookURL.txt';
     $webHookURL = file_get_contents($file_Name);
+
+    print_r($file_Name);
 
     $bx24 = new Bitrix24API($webHookURL);
 
@@ -20,7 +24,7 @@ try {
 
 //    учуся
     $deal = $bx24->getDeal(22843);
-    print_r($deal);
+    print_r($deal['ID']);
 
 //    foreach ($generator as $deals) {
 //        foreach ($deals as $deal) {
